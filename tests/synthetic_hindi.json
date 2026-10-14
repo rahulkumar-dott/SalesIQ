@@ -1,0 +1,41 @@
+{
+  "_comment": "SYNTHETIC Hindi / Hinglish calls written for development (fictional people and companies). They test the text layers (PII masking, LLM analysis). They say nothing about speech-to-text accuracy on real Hindi audio.",
+  "hindi_health_insurance": {
+    "expect": {"is_sales": true, "category": "insurance", "currency": "INR", "amount": 18000, "outcome": "follow_up",
+               "pii": ["[EMAIL]", "[PHONE]"], "compliance_no": ["no_pressure_selling"]},
+    "lines": [
+      ["A", "नमस्ते सर, मैं राहुल बोल रहा हूँ सिक्योरलाइफ इंश्योरेंस से। आपने हेल्थ इंश्योरेंस के बारे में पूछताछ की थी।"],
+      ["B", "हाँ जी, मुझे अपनी फैमिली के लिए हेल्थ प्लान चाहिए। हम चार लोग हैं, मैं, मेरी पत्नी और दो बच्चे।"],
+      ["A", "बहुत अच्छा सर। आपकी उम्र क्या है और क्या किसी को पहले से कोई बीमारी है?"],
+      ["B", "मैं पैंतीस साल का हूँ। मेरी पत्नी को शुगर है, बाकी सब ठीक हैं।"],
+      ["A", "ठीक है सर। मैं आपको दस लाख का फैमिली फ्लोटर प्लान सुझाऊँगा। सालाना प्रीमियम अठारह हज़ार रुपये होगा।"],
+      ["B", "अठारह हज़ार थोड़ा ज़्यादा लग रहा है। क्या शुगर की वजह से प्रीमियम बढ़ेगा? और क्लेम कैसे मिलता है?"],
+      ["A", "सर, आज ही लेना होगा, यह ऑफर कल खत्म हो रहा है। बाकी शर्तें आपको मेल पर मिल जाएँगी।"],
+      ["B", "ठीक है, मुझे सोचने के लिए थोड़ा समय चाहिए। मैं अपनी पत्नी से बात करके कल बताता हूँ।"],
+      ["A", "ठीक है सर, मैं कल शाम को फोन करूँगा। आप अपना ईमेल और नंबर बता दीजिए।"],
+      ["B", "मेरा ईमेल है suresh dot kumar at the rate gmail dot com और नंबर है नौ आठ सात छह पांच चार तीन दो एक शून्य।"]
+    ]
+  },
+  "hinglish_saas": {
+    "expect": {"is_sales": true, "category": "saas", "currency": "INR", "outcome": "follow_up", "pii": ["[PHONE]"]},
+    "lines": [
+      ["A", "Hello Amit ji, main Priya bol rahi hoon CloudDesk se. Aapne hamare CRM ke demo ke liye request kiya tha."],
+      ["B", "Haan, hum log abhi Excel use karte hain, leads track karna bahut mushkil ho gaya hai."],
+      ["A", "Samajh sakti hoon. Hamara Pro plan pachaas users tak ka hai, ek hazaar do sau rupaye per user per month. Annual contract par das percent discount milega."],
+      ["B", "Matlab total saal ka kitna padega? Aur kya WhatsApp integration bhi hai?"],
+      ["A", "Bilkul, WhatsApp integration included hai. Pachaas users ka annual total discount ke baad chhe lakh adtalis hazaar rupaye hoga."],
+      ["B", "Theek hai, lekin budget thoda zyada hai. Hum pehle ek mahine ka trial lena chahenge, phir decide karenge."],
+      ["A", "Zaroor, main aapko trial ka link aaj hi bhej deti hoon. Kal subah dubara call kar loon?"],
+      ["B", "Haan, kal subah gyarah baje theek rahega. Mera number hai nau aath saat chhe paanch char teen do ek shunya."]
+    ]
+  },
+  "hindi_not_sales": {
+    "expect": {"is_sales": false},
+    "lines": [
+      ["A", "अरे यार, कल तुम पार्टी में क्यों नहीं आए? सब लोग तुम्हें याद कर रहे थे।"],
+      ["B", "कुछ काम आ गया था। अगली बार पक्का आऊँगा। तुम बताओ, कैसी रही?"],
+      ["A", "बहुत मज़ा आया। खाना भी बढ़िया था और गाने भी।"],
+      ["B", "चलो अच्छा है। इस इतवार को क्रिकेट खेलने चलोगे?"]
+    ]
+  }
+}

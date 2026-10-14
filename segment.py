@@ -60,7 +60,9 @@ def build_utterances(data: dict, gap: float):
             utts.append(cur)
     for u in utts:
         # words/timestamps stay as they are; only the text gets punctuation (punct.py), then PII masking (pii.py)
-        text = punct.restore(" ".join(x["word"] for x in u["words"] if x["word"]))
+        text = " ".join(x["word"] for x in u["words"] if x["word"])
+        if str(data.get("language") or "en").startswith("en"):  # the punctuation model is English-only
+            text = punct.restore(text)
         u["text"], found = pii.mask_text(text)
         u["pii"] = dict(found)
     return utts
@@ -157,7 +159,9 @@ def llm_analyze(utts, max_chars=60000):
         lines.append(line)
     speakers = sorted({u["speaker"] for u in utts})
     prompt = (
-        "Below is a diarized transcript of a sales call (it may start mid-conversation); "
+        "Below is a diarized transcript of a sales call (it may start mid-conversation). The call may be in "
+        "English, Hindi (Devanagari or Roman script) or Hinglish (mixed); read it as spoken. Write every answer "
+        "field in English, but keep quotes in the original language. "
         "each line is [index] speaker: text.\n"
         "Tasks:\n"
         "0. conversation: FIRST decide whether this is a SALES conversation, meaning someone is trying to "
@@ -189,7 +193,12 @@ def llm_analyze(utts, max_chars=60000):
         "deal: {pricing: {recurring_amount: number|null (the recurring price per period exactly as stated), "
         "recurring_period: \"monthly\"|\"yearly\"|null, term_months: int|null (length of the deal or pilot "
         "discussed), free_months: number (months given free, 0 if none), one_time_fees: [numbers actually "
-        "charged once; waived fees are NOT included]}, "
+        "charged once; waived fees are NOT included], unit_count: number|null (how many seats/users/units "
+        "recurring_amount is PER, null if it is not a per-unit price), discount_percent: number (ONLY a "
+        "percent discount that is stated separately from a LIST price and is NOT already inside "
+        "recurring_amount. If the call states the final discounted price, put that final price in "
+        "recurring_amount and use 0 here; never apply a discount twice), stated_total: number|null "
+        "(a TOTAL for the whole deal that the salesperson says outright; copy it, never calculate it)}, "
         "amount: number|null (ONLY when there is no recurring price: vehicle price, loan principal, TOTAL "
         "premium per period including riders and NOT the sum assured, quoted rent, or a flat price; leave null "
         "when recurring_amount is set, the total is computed from pricing), "
@@ -272,23 +281,35 @@ def compute_deal(pricing) -> dict | None:
     Free months are assumed to fall in the first year.
     """
     p = pricing if isinstance(pricing, dict) else {}
+    stated = _num(p.get("stated_total"))
     amount, period = _num(p.get("recurring_amount")), p.get("recurring_period")
     term = _num(p.get("term_months"))
     assumed = False
     if (not term or term <= 0) and period == "yearly":
         term, assumed = 12.0, True  # a yearly price with no stated term: the priced period is one year
     if not amount or period not in ("monthly", "yearly") or not term or term <= 0:
-        return None
+        # no usable recurring price: an outright stated total is still a figure we can trust
+        return {"total_contract_value": round(stated, 2), "total_source": "stated"} if stated else None
     free = min(max(_num(p.get("free_months")) or 0.0, 0.0), term)
     fees = [f for f in (_num(x) for x in (p.get("one_time_fees") or [])) if f and f > 0]
-    monthly = amount if period == "monthly" else amount / 12
+    units = max(_num(p.get("unit_count")) or 1.0, 1.0)  # price per seat/user -> multiply by the count
+    disc = min(max(_num(p.get("discount_percent")) or 0.0, 0.0), 100.0)
+    monthly = (amount if period == "monthly" else amount / 12) * units * (1 - disc / 100)
     fee_total = sum(fees)
     r = lambda v: round(v, 2)
+    total = monthly * (term - free) + fee_total
+    first_year = monthly * (min(12.0, term) - min(free, 12.0)) + fee_total
+    if stated and term > 12 and abs(stated - first_year) <= 0.01 * stated:
+        stated = None  # the "total" said out loud is just the first-year outlay: keep the term total
     return {
         "monthly_value": r(monthly),
         "annual_value": r(monthly * 12),
         "first_year_value": r(monthly * (min(12.0, term) - min(free, 12.0)) + fee_total),
-        "total_contract_value": r(monthly * (term - free) + fee_total),
+        "total_contract_value": r(stated) if stated else r(total),
+        "total_source": "stated" if stated else "computed",
+        "calculated_total": r(total),
+        "unit_count": units,
+        "discount_percent": disc,
         "term_months": term,
         "term_assumed": assumed,
         "free_months": free,

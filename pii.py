@@ -18,11 +18,23 @@ import os
 import re
 from collections import Counter
 
-DIGIT_WORDS = {"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"}
+DIGIT_WORDS = {
+    "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
+    # Hindi digits, Roman script (ASR spellings vary)
+    "shunya", "sifar", "ek", "do", "teen", "char", "chaar", "paanch", "panch", "chhe", "chhah", "chah", "cheh",
+    "saat", "sat", "aath", "nau",
+    # Hindi digits, Devanagari
+    "\u0936\u0942\u0928\u094d\u092f", "\u090f\u0915", "\u0926\u094b", "\u0924\u0940\u0928", "\u091a\u093e\u0930",
+    "\u092a\u093e\u0901\u091a", "\u092a\u093e\u0902\u091a", "\u091b\u0939", "\u091b\u0903", "\u091b\u0947",
+    "\u0938\u093e\u0924", "\u0906\u0920", "\u0928\u094c", "\u091c\u0940\u0930\u094b",
+}
+AT_WORDS = {"at", "\u090f\u091f"}                       # at, एट
+DOT_WORDS = {"dot", "\u0921\u0949\u091f", "\u0921\u0949\u091f\u094d"}  # dot, डॉट
 MULTIPLIERS = {"double": 2, "triple": 3}
-TLDS = {"com", "ai", "net", "org", "io", "tech", "co", "in", "edu", "gov", "biz", "info", "me", "dev", "app", "us", "uk"}
+TLDS = {"com", "ai", "net", "org", "io", "tech", "co", "in", "edu", "gov", "biz", "info", "me", "dev", "app", "us", "uk",
+        "\u0915\u0949\u092e", "\u0915\u0949\u092e\u094d"}
 CONNECTORS = {"dot", "at", "dash", "underscore", "hyphen"}
-_STRIP = ".,!?;:\"'()[]"
+_STRIP = ".,!?;:\"'()[]\u0964\u0965"  # incl. the Hindi danda (\u0964)
 
 
 def enabled() -> bool:
@@ -81,16 +93,16 @@ def find_spans(tokens: list) -> list:
         if "@" in t and re.search(r"[A-Za-z0-9]", t) and "." in t:
             add(i, i + 1, "[EMAIL]")
     for i, t in enumerate(tokens):
-        if _clean(t) != "at":
+        if _clean(t) not in AT_WORDS:
             continue
         # the TLD must follow within a few tokens: "... at omnicore dot com" / "... at omnicore .tech"
         for j in range(i + 1, min(i + 7, n)):
             c = _clean(tokens[j])
-            ends = c in TLDS and j > i + 1 and _clean(tokens[j - 1]) == "dot"
+            ends = c in TLDS and j > i + 1 and _clean(tokens[j - 1]) in DOT_WORDS
             glued = bool(re.fullmatch(r"\.[a-z]{2,4}", c)) and c[1:] in TLDS
             if ends or glued:
                 left = i - 1
-                while left - 2 >= 0 and _clean(tokens[left - 1]) == "dot":
+                while left - 2 >= 0 and _clean(tokens[left - 1]) in DOT_WORDS:
                     left -= 2
                 if left >= 0:
                     add(left, j + 1, "[EMAIL]")
