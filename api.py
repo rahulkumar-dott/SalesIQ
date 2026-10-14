@@ -15,7 +15,8 @@ Endpoints:
     GET /dataset                     the 10 dataset samples (downloaded / analysed flags)
     POST /jobs/dataset {sample}      analyse a dataset sample (downloads it if needed)
     POST /jobs/upload  (file)        analyse an uploaded audio or video file (audio track only)
-    GET /jobs, /jobs/{id}            job status (queued/running/done/failed) and recent log
+    GET /jobs, /jobs/{id}            job status (queued/running/done/failed/cancelled) and log
+    POST /jobs/{id}/cancel           cancel a queued or running job
 
 Analysis is produced by transcribe.py -> segment.py (run from the CLI, or as a job via
 POST /jobs/*); the GET endpoints only read the results. If ui/dist exists it is served at /.
@@ -218,7 +219,14 @@ def list_jobs():
 def get_job(job_id: str):
     if job_id not in jobs.JOBS:
         raise HTTPException(404, "no such job")
-    return jobs.public(jobs.JOBS[job_id])
+    return jobs.public(jobs.JOBS[job_id], full=True)
+
+
+@app.post("/jobs/{job_id}/cancel")
+def cancel_job(job_id: str):
+    if job_id not in jobs.JOBS:
+        raise HTTPException(404, "no such job")
+    return jobs.public(jobs.cancel(job_id), full=True)
 
 
 @app.get("/budget")

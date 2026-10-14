@@ -665,11 +665,114 @@ function Overview({ calls }) {
   );
 }
 
+/* ---------------------------------------------------------------- jobs page */
+
+const fmtDur = (sec) => {
+  if (sec == null || sec < 0) return "–";
+  const s = Math.round(sec);
+  return s >= 3600 ? `${Math.floor(s / 3600)}h ${Math.floor((s % 3600) / 60)}m` : s >= 60 ? `${Math.floor(s / 60)}m ${s % 60}s` : `${s}s`;
+};
+const fmtClock = (t) => (t ? new Date(t * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" }) : "–");
+const JOB_KIND = { done: "good", failed: "bad", running: "warn", queued: "", cancelled: "", interrupted: "bad" };
+
+function JobRow({ job, onOpen, onChanged, now }) {
+  const [open, setOpen] = useState(false);
+  const active = job.status === "running" || job.status === "queued";
+  const detail = usePoll(() => api.job(job.id), open && active ? 2000 : 0, [job.id, open, job.status]);
+  const elapsed = job.started ? (job.finished || now) - job.started : null;
+  const log = open ? detail.data?.log || job.log || [] : [];
+  const cancel = async () => {
+    try {
+      await api.cancelJob(job.id);
+      onChanged();
+    } catch (e) {
+      /* the next poll shows the real state */
+    }
+  };
+  return (
+    <>
+      <tr className="job-row" onClick={() => setOpen(!open)}>
+        <td><b>{job.name}</b></td>
+        <td>{job.source}{job.kind ? ` · ${job.kind}` : ""}</td>
+        <td><Badge kind={JOB_KIND[job.status]}>{job.status}</Badge></td>
+        <td>{active ? job.step : "–"}</td>
+        <td>{fmtClock(job.created)}</td>
+        <td>{job.status === "queued" ? "waiting" : fmtDur(elapsed)}</td>
+        <td className="actions" onClick={(e) => e.stopPropagation()}>
+          {job.status === "done" ? <button className="link" onClick={() => onOpen(job.name)}>Open results</button> : null}
+          {active ? <button className="link danger" onClick={cancel}>Cancel</button> : null}
+        </td>
+      </tr>
+      {open ? (
+        <tr className="job-detail">
+          <td colSpan={7}>
+            {job.error ? <p className="error">{job.error}</p> : null}
+            {job.duration_s ? <p className="muted">Media length {fmtDur(job.duration_s)}</p> : null}
+            {log.length ? <pre className="log-box">{log.join("\n")}</pre> : <p className="muted">No output yet.</p>}
+          </td>
+        </tr>
+      ) : null}
+    </>
+  );
+}
+
+function JobsPage({ jobs, onOpen, onChanged }) {
+  const list = arr(jobs);
+  const [now, setNow] = useState(Date.now() / 1000);
+  useEffect(() => {
+    const t = setInterval(() => setNow(Date.now() / 1000), 1000);
+    return () => clearInterval(t);
+  }, []);
+  const count = (st) => list.filter((j) => j.status === st).length;
+  return (
+    <div className="stack">
+      <h2>Jobs</h2>
+      <div className="stats">
+        <Stat label="Running" value={count("running")} />
+        <Stat label="Queued" value={count("queued")} />
+        <Stat label="Done" value={count("done")} />
+        <Stat label="Failed" value={count("failed") + count("interrupted")} />
+      </div>
+      {!list.length ? (
+        <p className="muted">No jobs yet. Start one from "Analyse a call" in the sidebar.</p>
+      ) : (
+        <section className="card">
+          <table className="kv jobs-table">
+            <thead>
+              <tr><th>Call</th><th>Source</th><th>Status</th><th>Step</th><th>Started at</th><th>Time</th><th></th></tr>
+            </thead>
+            <tbody>
+              {list.map((j) => <JobRow key={j.id} job={j} onOpen={onOpen} onChanged={onChanged} now={now} />)}
+            </tbody>
+          </table>
+          <p className="muted">Click a row for the log. Jobs run one at a time; history is kept across restarts.</p>
+        </section>
+      )}
+    </div>
+  );
+}
+
 /* ---------------------------------------------------------------- app */
 
 export default function App() {
   const [view, setView] = useState("overview");
   const [selected, setSelected] = useState(null);
+  const [sideOpen, setSideOpen] = useState(() => {
+    try {
+      return localStorage.getItem("salesiq.sidebar") !== "closed";
+    } catch {
+      return true;
+    }
+  });
+  const toggleSide = () => {
+    const next = !sideOpen;
+    setSideOpen(next);
+    try {
+      localStorage.setItem("salesiq.sidebar", next ? "open" : "closed");
+    } catch {
+      /* storage blocked: the toggle still works for this session */
+    }
+  };
   const [section, setSection] = useState("overview");
   const calls = usePoll(api.calls, 0);
   const budget = usePoll(api.budget, 15000);
@@ -694,6 +797,10 @@ export default function App() {
   return (
     <div className="app">
       <header>
+        <button className="icon-btn" onClick={toggleSide} aria-label={sideOpen ? "Hide sidebar" : "Show sidebar"}
+                title={sideOpen ? "Hide sidebar" : "Show sidebar"}>
+          {sideOpen ? "\u25C0" : "\u2630"}
+        </button>
         <h1>SalesIQ</h1>
         <nav className="tabs">
           <button className={view === "overview" ? "on" : ""} onClick={() => setView("overview")}>
@@ -701,6 +808,12 @@ export default function App() {
           </button>
           <button className={view === "call" ? "on" : ""} disabled={!selected} onClick={() => setView("call")}>
             Call
+          </button>
+          <button className={view === "jobs" ? "on" : ""} onClick={() => setView("jobs")}>
+            Jobs
+            {arr(jobs.data).filter((j) => j.status === "running" || j.status === "queued").length ? (
+              <span className="pill">{arr(jobs.data).filter((j) => j.status === "running" || j.status === "queued").length}</span>
+            ) : null}
           </button>
         </nav>
         <span className="spacer" />
@@ -711,15 +824,19 @@ export default function App() {
         ) : null}
       </header>
 
-      <main>
-        <aside>
-          <NewAnalysis onStarted={() => jobs.reload()} />
-          <Jobs jobs={jobs.data} onOpen={open} />
-          <CallList calls={calls.data} selected={selected} onSelect={open} />
-        </aside>
+      <main className={sideOpen ? "" : "no-side"}>
+        {sideOpen ? (
+          <aside>
+            <NewAnalysis onStarted={() => { jobs.reload(); }} />
+            <Jobs jobs={jobs.data} onOpen={open} />
+            <CallList calls={calls.data} selected={selected} onSelect={open} />
+          </aside>
+        ) : null}
         <div className="content">
           {calls.error ? (
             <p className="error">Cannot reach the API ({calls.error}). Start it with: python api.py</p>
+          ) : view === "jobs" ? (
+            <JobsPage jobs={jobs.data} onOpen={open} onChanged={jobs.reload} />
           ) : view === "call" && selected ? (
             <CallDetail key={selected} name={selected} section={section} setSection={setSection} />
           ) : (

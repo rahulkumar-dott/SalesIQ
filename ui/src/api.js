@@ -22,6 +22,8 @@ export const api = {
   budget: () => req("/budget"),
   dataset: () => req("/dataset"),
   jobs: () => req("/jobs"),
+  job: (id) => req(`/jobs/${id}`),
+  cancelJob: (id) => req(`/jobs/${id}/cancel`, { method: "POST" }),
   startSample: (sample) =>
     req("/jobs/dataset", {
       method: "POST",

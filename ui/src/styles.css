@@ -154,3 +154,15 @@ button.link { background: none; border: 0; color: var(--accent); cursor: pointer
 .banner.warn { background: var(--warn-bg); color: var(--warn); border-color: transparent; }
 .banner .muted { color: inherit; opacity: 0.85; }
 
+
+.icon-btn { border: 1px solid var(--line); background: var(--bg); color: var(--text); border-radius: 6px; width: 34px; height: 32px; cursor: pointer; font-size: 14px; }
+main.no-side { grid-template-columns: 1fr; }
+.pill { display: inline-block; margin-left: 6px; min-width: 18px; padding: 0 6px; border-radius: 999px; background: var(--accent); color: #fff; font-size: 11px; line-height: 18px; text-align: center; }
+.jobs-table td, .jobs-table th { padding: 8px 10px; }
+.job-row { cursor: pointer; }
+.job-row:hover { background: var(--bg); }
+.job-row .actions { white-space: nowrap; }
+.job-row .actions button { margin-right: 10px; }
+.job-detail td { background: var(--bg); }
+.log-box { margin: 0; padding: 10px; max-height: 260px; overflow: auto; background: var(--card); border: 1px solid var(--line); border-radius: 6px; font: 12px/1.45 ui-monospace, Menlo, Consolas, monospace; white-space: pre-wrap; }
+button.link.danger { color: var(--bad); }
