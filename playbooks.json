@@ -1,0 +1,132 @@
+{
+  "_comment": "Edit freely. 'fields' are extracted per call type; 'compliance' checks only run for regulated types. Field names are keys in the output, so keep them stable once you have data.",
+
+  "qualification": {
+    "need": "why the customer wants this / the problem or trigger",
+    "budget": "what they can or will spend, or how they plan to pay",
+    "authority": "who decides, who else must approve",
+    "timeline": "when they want to decide or have it in place"
+  },
+
+  "compliance_checks": {
+    "recording_notice": "told the call is recorded / consent to record",
+    "identity_and_purpose": "agent stated who they are, the company and the purpose of the call",
+    "terms_or_risks_explained": "key terms, charges, risks or conditions were explained",
+    "exclusions_or_fees_explained": "exclusions, limitations, fees or penalties were explained",
+    "no_pressure_selling": "no undue pressure, false urgency or misleading claims (yes = no pressure was used)",
+    "time_to_consider_given": "customer was given time to think or compare, or offered a cooling-off period",
+    "recommendation_matches_needs": "what was recommended fits the needs the customer stated",
+    "consent_or_optout_handled": "customer consent / opt-out or do-not-contact requests were respected"
+  },
+
+  "categories": {
+    "saas": {
+      "label": "Software / SaaS / B2B",
+      "describe": "software, platform, subscription, licence or other B2B product",
+      "regulated": false,
+      "fields": {
+        "plan_or_tier": "plan or tier discussed",
+        "seats": "number of users / seats",
+        "term_months": "contract length in months",
+        "billing": "monthly | annual | other",
+        "implementation_fee": "one-off setup or onboarding fee, if any",
+        "free_trial_or_pilot": "true if a trial or pilot was offered or run",
+        "integrations_needed": "systems it must integrate with",
+        "current_tool_or_competitor": "what they use today",
+        "economic_buyer": "person who controls the budget",
+        "champion": "internal person pushing for it",
+        "decision_criteria": "what they will judge options on",
+        "decision_process": "steps and approvals before signing",
+        "critical_event": "deadline or event driving the purchase"
+      }
+    },
+    "insurance": {
+      "label": "Insurance",
+      "describe": "life, health, motor, home, travel or other insurance policy",
+      "regulated": true,
+      "fields": {
+        "policy_type": "term life, health, motor, home, ...",
+        "who_is_covered": "people or assets to be covered",
+        "dependents": "number and details of dependents, incl. special needs",
+        "years_of_support_needed": "how long dependents need support",
+        "income": "customer income mentioned",
+        "debts_and_final_expenses": "loans, mortgage, funeral costs mentioned",
+        "existing_cover": "current policies incl. employer cover",
+        "coverage_amount": "sum assured / cover amount discussed",
+        "coverage_gap": "gap between need and existing cover, if discussed",
+        "term_years": "policy term",
+        "premium": "premium amount quoted",
+        "premium_frequency": "monthly | quarterly | yearly | single",
+        "premium_budget": "what the customer can afford",
+        "riders_or_addons": "optional covers discussed",
+        "health_or_medical_disclosures": "pre-existing conditions or lifestyle factors mentioned",
+        "beneficiary": "nominee or beneficiary discussed"
+      }
+    },
+    "vehicle": {
+      "label": "Vehicles",
+      "describe": "new or used car, bike or other vehicle",
+      "regulated": false,
+      "fields": {
+        "make_model": "vehicle(s) discussed",
+        "new_or_used": "new | used",
+        "price_quoted": "price quoted",
+        "down_payment": "down payment amount",
+        "emi_and_tenure": "monthly instalment and months, if financed",
+        "financing_discussed": "true if loan or finance came up",
+        "credit_application_started": "true if a finance application was started",
+        "trade_in": "trade-in vehicle and value discussed",
+        "test_drive": "none | offered | scheduled | done",
+        "appointment": "showroom visit or test drive appointment date/time, if set",
+        "accessories_or_addons": "extras discussed",
+        "delivery_timeline": "when they want delivery"
+      }
+    },
+    "real_estate": {
+      "label": "Real estate",
+      "describe": "buying, selling, renting or leasing property",
+      "regulated": false,
+      "fields": {
+        "transaction": "buy | rent | lease | sell",
+        "property_type": "apartment, villa, plot, commercial, ...",
+        "location_preference": "areas or localities",
+        "budget_range": "budget or rent range",
+        "motivation": "why they are moving or buying now",
+        "financing": "cash | loan | mixed | unknown",
+        "pre_approval": "none | pre_qualified | pre_approved",
+        "lender": "bank or lender named",
+        "down_payment": "down payment available",
+        "timeline_bucket": "under_3_months | 3_to_6_months | exploring",
+        "existing_property_to_sell": "true if they must sell or vacate first",
+        "site_visit": "none | offered | scheduled | done",
+        "decision_makers": "family members or partners involved"
+      }
+    },
+    "loan": {
+      "label": "Loans / credit",
+      "describe": "personal, home, vehicle or business loan, credit card or other credit product",
+      "regulated": true,
+      "fields": {
+        "product": "personal loan, home loan, credit card, ...",
+        "amount_requested": "amount the customer wants",
+        "tenure_months": "repayment period in months",
+        "interest_rate_quoted": "rate or APR quoted",
+        "fees_quoted": "processing or other fees quoted",
+        "emi_quoted": "monthly instalment quoted",
+        "purpose": "what the money is for",
+        "employment_type": "salaried | self_employed | other",
+        "income": "income stated",
+        "existing_emis_or_debts": "current obligations mentioned",
+        "credit_score_or_history": "credit score or issues mentioned",
+        "documents_requested": "documents the agent asked for",
+        "eligibility_outcome": "eligible | not_eligible | pending | not_discussed"
+      }
+    },
+    "other": {
+      "label": "Other",
+      "describe": "anything that does not fit the types above",
+      "regulated": false,
+      "fields": {}
+    }
+  }
+}
