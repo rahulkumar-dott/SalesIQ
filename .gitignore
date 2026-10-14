@@ -1,0 +1,14 @@
+.venv/
+models/
+data/
+output/
+output_punct/
+profiles/
+*.log
+*.err
+__pycache__/
+.env
+.llm_spend.json
+ui/node_modules/
+ui/dist/
+golden/report-*.json
