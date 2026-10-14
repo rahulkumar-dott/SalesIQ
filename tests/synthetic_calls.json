@@ -1,0 +1,70 @@
+{
+  "_comment": "SYNTHETIC test calls written for development. Not real customers. 'expect' is the known answer used to check the playbooks.",
+  "insurance": {
+    "expect": {"category": "insurance", "currency": "INR", "regulated_failures": ["recording_notice", "no_pressure_selling", "exclusions_or_fees_explained"]},
+    "lines": [
+      ["A", "Hello sir, I'm Rohit from SecureLife. I saw you enquired about term insurance."],
+      ["B", "Yes, I wanted to take something for my family. I have a wife and two kids, the younger one is only four."],
+      ["A", "Very good. And what is your annual income, if you don't mind?"],
+      ["B", "About 18 lakh a year. I also have a home loan of around 40 lakh."],
+      ["A", "Do you have any existing cover?"],
+      ["B", "Only the 10 lakh my company gives me. Nothing personal."],
+      ["A", "Then you need at least 1.5 crore. I recommend a 1 crore 50 lakh term plan till age 60. The premium is 24,000 rupees per year."],
+      ["B", "That sounds a bit high. Is there anything cheaper? I'd like to think about it and compare."],
+      ["A", "Sir, this rate is only valid till tonight. Tomorrow the premium will go up by 20 percent, so you must buy today."],
+      ["B", "Okay, but what about critical illness? My father had a heart problem."],
+      ["A", "We can add a critical illness rider for 4,000 more per year. Shall I send the payment link right now?"],
+      ["B", "Alright, send it. My wife is the nominee."]
+    ]
+  },
+  "vehicle": {
+    "expect": {"category": "vehicle", "currency": "INR", "test_drive": "scheduled"},
+    "lines": [
+      ["A", "Good morning, this is Priya from Metro Motors. You enquired about the Hyundai Creta."],
+      ["B", "Yes, I'm looking at the SX variant, the 2026 model. What is the on-road price?"],
+      ["A", "On-road comes to about 17.8 lakh. Are you planning to finance or pay cash?"],
+      ["B", "Loan. I can put down 3 lakh. I also have an old i20 to trade in."],
+      ["A", "With 3 lakh down, the EMI is around 28,000 for 60 months. We can value your i20 at the showroom."],
+      ["B", "Okay. Can I test drive it first?"],
+      ["A", "Of course. Would Saturday at 11 work?"],
+      ["B", "Saturday 11 is fine. Please also check if you have it in white."],
+      ["A", "Done, Saturday 11 am, white SX test drive booked. I will send you the confirmation."]
+    ]
+  },
+  "real_estate": {
+    "expect": {"category": "real_estate", "pre_approval": "pre_approved", "timeline_bucket": "3_to_6_months"},
+    "lines": [
+      ["A", "Hi, this is Maya from Skyline Realty about the 3 bedroom apartment you enquired on."],
+      ["B", "Yes. We are relocating for my husband's job in about four months so we need to move fast."],
+      ["A", "Great. What budget are you looking at?"],
+      ["B", "Up to 1.2 crore. We are already pre-approved by HDFC for 90 lakh and have 30 lakh as down payment."],
+      ["A", "Perfect. Do you have a preferred area?"],
+      ["B", "Whitefield or Sarjapur. We also have to sell our flat in Pune first, and my husband will decide with me."],
+      ["A", "I can show you three options this weekend. Shall I book a site visit on Sunday?"],
+      ["B", "Yes, Sunday afternoon works."]
+    ]
+  },
+  "loan": {
+    "expect": {"category": "loan", "currency": "INR", "regulated_failures": ["terms_or_risks_explained", "exclusions_or_fees_explained"]},
+    "lines": [
+      ["A", "Hello, this is Anil from QuickCash Finance. You applied for a personal loan."],
+      ["B", "Yes, I need 5 lakh for my sister's wedding."],
+      ["A", "Are you salaried or self employed?"],
+      ["B", "Salaried, 85,000 a month, at an IT company for six years. I have one car loan EMI of 12,000."],
+      ["A", "Good. You are eligible. 5 lakh for 36 months, the EMI will be about 16,500."],
+      ["B", "What is the interest rate and are there any charges?"],
+      ["A", "Don't worry about that, it's all very competitive. Just send me your salary slips and PAN and Aadhaar and we will disburse tomorrow."],
+      ["B", "Okay, I will send them in an hour."]
+    ]
+  },
+  "other": {
+    "expect": {"category": "other"},
+    "lines": [
+      ["A", "Hi, this is Sam from GreenLeaf Landscaping. We are offering a garden redesign package this month."],
+      ["B", "I have a small backyard, about 200 square feet. What would it cost?"],
+      ["A", "For that size, around 1,200 dollars including plants and two days of labour."],
+      ["B", "That's reasonable. My wife handles the garden though, let me ask her and call you back on Friday."],
+      ["A", "Sure, I'll note Friday and send you our before and after photos."]
+    ]
+  }
+}

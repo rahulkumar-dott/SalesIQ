@@ -1,0 +1,48 @@
+{
+  "_comment": "SYNTHETIC non-sales and borderline conversations for testing the sales/not-sales gate.",
+  "personal_chat": {
+    "expect": "not_sales",
+    "lines": [
+      ["A", "Hey! How was your weekend? Did you end up going to the lake?"],
+      ["B", "Yeah, we did. It rained the whole time but the kids loved it."],
+      ["A", "Ha, that's classic. We just stayed home and watched movies."],
+      ["B", "Sounds nice honestly. Are you coming to Rina's birthday on Saturday?"],
+      ["A", "Definitely. I'll bring the cake. What time does it start?"],
+      ["B", "Around six. Bring the kids too."]
+    ]
+  },
+  "support_call": {
+    "expect": "not_sales",
+    "lines": [
+      ["A", "Thank you for calling Brightnet support, how can I help?"],
+      ["B", "My internet has been dropping every evening for three days now."],
+      ["A", "I'm sorry about that. Can you restart the router and tell me which lights are blinking?"],
+      ["B", "Okay, it's restarted. The power light is green and the internet light is red."],
+      ["A", "That means the line isn't syncing. I'll raise a ticket and a technician will visit tomorrow between 10 and 12."],
+      ["B", "Fine. Please make sure someone actually turns up this time."],
+      ["A", "I've marked it as priority. You'll get a text confirmation shortly."]
+    ]
+  },
+  "internal_meeting": {
+    "expect": "not_sales",
+    "lines": [
+      ["A", "Okay team, quick standup. Where are we on the release?"],
+      ["B", "Backend is done, I'm waiting on the QA pass for the payments module."],
+      ["A", "Any blockers?"],
+      ["B", "The staging database was down yesterday, that cost us half a day."],
+      ["A", "Understood. I'll ask infra to look at it. Let's ship Thursday if QA clears by Wednesday."],
+      ["B", "Works for me."]
+    ]
+  },
+  "support_then_upsell": {
+    "expect": "sales_or_unclear",
+    "lines": [
+      ["A", "Thanks for calling Brightnet, how can I help?"],
+      ["B", "My internet is slow in the evenings."],
+      ["A", "I see you are on the 50 megabit plan. Many families find that too slow now. We have a 200 megabit plan for just 15 dollars more per month."],
+      ["B", "Hmm, how much exactly would it be in total?"],
+      ["A", "Sixty-four dollars a month with a free router upgrade if you sign a 12 month term today."],
+      ["B", "Let me think about it and talk to my partner."]
+    ]
+  }
+}

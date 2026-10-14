@@ -1,0 +1,165 @@
+{
+  "_comment": "Golden labels for the 10 liva-ai/mock-sales calls. DRAFT: written by Claude from reading the reference transcripts, so objective fields only. A human must review before these are treated as ground truth. null = not labelled. Subjective counts (pitch/close attempts) are deliberately left unlabelled for a human.",
+  "_how_to_review": "For each call: check seller_ref_speaker, outcome_ok, and the pricing numbers against the reference transcript in data/reference/train.jsonl. Add pitch_attempts / close_attempts when you have counted them.",
+  "labelled_by": "draft-claude",
+  "calls": {
+    "sample-1": {
+      "reference_row": 0,
+      "is_sales": true,
+      "category": "saas",
+      "seller_ref_speaker": "Speaker_1",
+      "outcome_ok": [
+        "won"
+      ],
+      "currency": "USD",
+      "total_contract_value": 23000,
+      "annual_value": 11500,
+      "note": "11,500/yr for 2 years, premium onboarding in year 1; customer: 'You've got a deal'.",
+      "pitch_attempts": null,
+      "close_attempts": null
+    },
+    "sample-2": {
+      "reference_row": 1,
+      "is_sales": true,
+      "category": "saas",
+      "seller_ref_speaker": "Speaker_1",
+      "outcome_ok": [
+        "won",
+        "follow_up"
+      ],
+      "currency": "USD",
+      "total_contract_value": 58650,
+      "annual_value": 30600,
+      "first_year_value": 28050,
+      "note": "30,600/yr, 24 months, first month free, 5,000 fee waived; verbal yes but VP/CFO sign-off pending. Seller states first-12-month outlay 28,050.",
+      "pitch_attempts": null,
+      "close_attempts": null
+    },
+    "sample-3": {
+      "reference_row": 2,
+      "is_sales": true,
+      "category": "saas",
+      "seller_ref_speaker": "Speaker_1",
+      "outcome_ok": [
+        "won",
+        "follow_up"
+      ],
+      "currency": "USD",
+      "total_contract_value": 50000,
+      "annual_value": 25000,
+      "note": "25,000/yr x 2 years, 20 seats, onboarding included; 'You have my verbal commitment', needs VP approval.",
+      "pitch_attempts": null,
+      "close_attempts": null
+    },
+    "sample-4": {
+      "reference_row": 3,
+      "is_sales": true,
+      "category": "saas",
+      "seller_ref_speaker": "Speaker_1",
+      "outcome_ok": [
+        "unclear",
+        "follow_up",
+        "undecided"
+      ],
+      "currency": null,
+      "total_contract_value": null,
+      "note": "Demo only; no price or commitment in the clip.",
+      "pitch_attempts": null,
+      "close_attempts": null
+    },
+    "sample-5": {
+      "reference_row": 4,
+      "is_sales": true,
+      "category": "saas",
+      "seller_ref_speaker": "Speaker_2",
+      "outcome_ok": [
+        "unclear",
+        "follow_up",
+        "undecided"
+      ],
+      "currency": null,
+      "total_contract_value": null,
+      "note": "Demo to a sceptical customer (Speaker_1 is the customer); security concern raised; no price.",
+      "pitch_attempts": null,
+      "close_attempts": null
+    },
+    "sample-6": {
+      "reference_row": 5,
+      "is_sales": true,
+      "category": "saas",
+      "seller_ref_speaker": "Speaker_2",
+      "outcome_ok": [
+        "follow_up",
+        "undecided",
+        "unclear"
+      ],
+      "currency": "USD",
+      "total_contract_value": 6000,
+      "note": "6-month pilot, 20 seats at $50/seat/month = 1,000/month, total 6,000; customer still pushing back on price (wants a free trial). Quoted, not agreed.",
+      "pitch_attempts": null,
+      "close_attempts": null
+    },
+    "sample-7": {
+      "reference_row": 6,
+      "is_sales": true,
+      "category": "saas",
+      "seller_ref_speaker": "Speaker_1",
+      "outcome_ok": [
+        "unclear",
+        "follow_up",
+        "undecided"
+      ],
+      "currency": null,
+      "total_contract_value": null,
+      "note": "Demo of a video-generation product; objections about quality and creative control; no price.",
+      "pitch_attempts": null,
+      "close_attempts": null
+    },
+    "sample-8": {
+      "reference_row": 7,
+      "is_sales": true,
+      "category": "saas",
+      "seller_ref_speaker": "Speaker_1",
+      "outcome_ok": [
+        "won",
+        "follow_up"
+      ],
+      "currency": null,
+      "total_contract_value": 120000,
+      "note": "Year-1 license 95,000 + one-time integration 25,000 = 120,000, two payments of 60,000; customer 'willing to take that deal to my CFO'. Year-2 price unspecified, so total here is the first year. Currency is never stated in this clip, so it is not labelled (an earlier draft wrongly assumed USD).",
+      "pitch_attempts": null,
+      "close_attempts": null
+    },
+    "sample-9": {
+      "reference_row": 8,
+      "is_sales": true,
+      "category": "saas",
+      "seller_ref_speaker": "Speaker_1",
+      "outcome_ok": [
+        "won"
+      ],
+      "currency": "USD",
+      "total_contract_value": 12000,
+      "annual_value": 24000,
+      "note": "6-month contract at 2,000/month = 12,000; customer: 'Yes. That's correct. Let's do it.'",
+      "pitch_attempts": null,
+      "close_attempts": null
+    },
+    "sample-10": {
+      "reference_row": 9,
+      "is_sales": true,
+      "category": "saas",
+      "seller_ref_speaker": "Speaker_2",
+      "outcome_ok": [
+        "unclear",
+        "follow_up",
+        "undecided"
+      ],
+      "currency": null,
+      "total_contract_value": null,
+      "note": "Demo (Speaker_1 is the customer); questions about accuracy; no price in the clip.",
+      "pitch_attempts": null,
+      "close_attempts": null
+    }
+  }
+}
